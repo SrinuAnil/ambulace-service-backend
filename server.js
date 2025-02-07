@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
 
 const bookingSchema = new mongoose.Schema({
   userId: String,
+  username: String,
   ambulanceId: Number,
   ambulanceName: String,
   totalPrice: Number,
@@ -196,7 +197,16 @@ app.post("/adminLogin", async (req, res) => {
 app.post("/api/bookings", async (req, res) => {
   try {
     const booking = new Booking(req.body);
-    console.log(req.body)
+    console.log(booking.userId)
+    const userId = booking.userId
+    const amount = booking.totalPrice
+    const customer = await Customer.findById(userId);
+    if (!customer) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    customer.topup -= amount;
+    await customer.save();
     const result = await booking.save();
     res.status(201).json({ message: "Booking saved!", bookingId: result._id });
   } catch (err) {
@@ -246,3 +256,27 @@ app.post("/update-location", async (req, res) => {
     res.status(500).json({ error: "Failed to store location." });
   }
 });
+
+
+// **Update Amount **
+
+app.post("/api/recharge", async (req, res) => {
+  try {
+      const { userId, amount } = req.body;
+
+      const customer = await Customer.findById(userId);
+      if (!customer) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      customer.topup += amount;
+      console.log(customer, amount)
+      await customer.save();
+
+      res.json({ message: "Recharge successful", newBalance: customer.topup });
+  } catch (error) {
+      console.error("Recharge Error:", error);
+      res.status(500).json({ message: "Server error" });
+  }
+});
+
