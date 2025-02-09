@@ -56,6 +56,11 @@ const customerSchema = new mongoose.Schema({
   password: { type: String, required: true },
   gender: { type: String },
   topup: { type: Number, default: 0 },
+  address: { type: Object, default: {} },
+  location: {
+    from: { latitude: Number, longitude: Number },
+    to: { latitude: Number, longitude: Number },
+  }
 });
 
 const User = mongoose.model("users", userSchema);
