@@ -42,7 +42,7 @@ const bookingSchema = new mongoose.Schema({
   address: String,
   ambulanceDetails: String,
   selectedOptions: String,
-  payMethod: "Cash",
+  payMethod: String,
   fromLocation: String,
   toLocation: String,
   timestamp: Date,
