@@ -268,6 +268,26 @@ app.post("/update-location", async (req, res) => {
   }
 });
 
+app.post("/update-address", async (req, res) => {
+  const { userId, address } = req.body;
+
+  if (!userId || !address) {
+      return res.status(400).json({ message: "User ID and address are required." });
+  }
+
+  try {
+      // Update user's address in database
+      await db.collection("users").updateOne(
+          { _id: userId },
+          { $push: { addresses: address } } // Add address to user's addresses array
+      );
+
+      res.json({ message: "Address added successfully!" });
+  } catch (error) {
+      res.status(500).json({ message: "Failed to update address.", error });
+  }
+});
+
 
 // **Update Amount **
 
