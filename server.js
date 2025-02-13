@@ -29,18 +29,23 @@ const userSchema = new mongoose.Schema({
   userId: String,
   phone_number: String,
   password: String,
+  address: String,
   role: String,
 });
 
 const bookingSchema = new mongoose.Schema({
   userId: String,
   username: String,
-  ambulanceId: Number,
-  ambulanceName: String,
+  ambulanceDetails: String,
   totalPrice: Number,
   timestamp: Date,
-  location: String,
-  time: Date,
+  address: String,
+  ambulanceDetails: String,
+  selectedOptions: String,
+  payMethod: "Cash",
+  fromLocation: String,
+  toLocation: String,
+  timestamp: Date,
 });
 
 const locationSchema = new mongoose.Schema({
@@ -60,7 +65,8 @@ const customerSchema = new mongoose.Schema({
   location: {
     from: { latitude: Number, longitude: Number },
     to: { latitude: Number, longitude: Number },
-  }
+  },
+  timestamp: Date,
 });
 
 const User = mongoose.model("users", userSchema);
